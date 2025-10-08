@@ -15,7 +15,7 @@ pipeline {
             this is a block comment
             second line
         */
-        statge {
+        stage {
             steps {
                 sh 'docker build -t my-playwright .'
             }
