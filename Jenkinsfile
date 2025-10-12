@@ -44,10 +44,11 @@ pipeline {
             }
             steps {
                 sh '''
-                   
-                   npx http-server build -p 3000 &
-                   sleep 10
-                   npx playwright test
+                    npm ci
+                    npx playwright install --with-deps
+                    npx http-server build -p 3000 &
+                    sleep 10
+                    npx playwright test
                    
                 '''
             }
