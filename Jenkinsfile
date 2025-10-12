@@ -31,10 +31,8 @@ pipeline {
             steps {
                 sh '''
                     # For Jest
-                    npm test -- --ci --watchAll=false
-                    
-                    # OR set environment variable
-                    CI=true npm test
+                    npm test 
+                   
                 '''
             }
         }
