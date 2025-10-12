@@ -20,5 +20,23 @@ pipeline {
                 '''
             }
         }
+        
+        stage('Test') {
+            agent {
+                docker {
+                    image 'node:18-alpine'
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    # For Jest
+                    npm test -- --ci --watchAll=false
+                    
+                    # OR set environment variable
+                    CI=true npm test
+                '''
+            }
+        }
     }
 }
