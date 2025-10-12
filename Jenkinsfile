@@ -46,9 +46,12 @@ pipeline {
                 sh '''
                     npm ci
                     npx playwright install --with-deps
+                    npx playwright --version
                     npx http-server build -p 3000 &
+                    npx playwright --version
                     sleep 10
                     npx playwright test
+                    npx playwright --version
                    
                 '''
             }
