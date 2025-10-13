@@ -24,7 +24,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'node:22-alpine'
+                    image 'node:18-alpine'
                     reuseNode true
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
                 stage ('Unit Testing') {
                     agent {
                         docker {
-                            image 'node:22-alpine'
+                            image 'node:18-alpine'
                             reuseNode true
                         }
                     }
@@ -68,7 +68,7 @@ pipeline {
                 stage ('End2End Testing') {
                     agent {
                         docker {
-                            image 'mcr.microsoft.com/playwright:v1.39.0-jammy'
+                            image 'my-docker'
                             reuseNode true
                             //args '-u root:root' !!! don't do this!!  TO SPECIFY ANOTHER USER & GROUP
                         }
@@ -77,8 +77,7 @@ pipeline {
                     steps {
                         echo 'Testing the app ...'
                         sh '''
-                            npm install serve
-                            node_modules/.bin/serve -s build &
+                            serve -s build &
                             sleep 10
                             npx playwright test --reporter=html
                         '''
@@ -112,7 +111,7 @@ pipeline {
                     netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     netlify status
-                    netlify deploy --dir=build --no-build --json > staging-output.json
+                    netlify deploy --dir=build --json > staging-output.json
                     CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' staging-output.json)
                     npx playwright test --reporter=html
                 '''
@@ -156,7 +155,7 @@ pipeline {
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     
-                    netlify deploy --dir=build --prod --no-build
+                    netlify deploy --dir=build --prod 
                     npx playwright test --reporter=html
                 '''
             }
