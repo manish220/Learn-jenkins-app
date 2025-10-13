@@ -4,7 +4,7 @@ pipeline {
     environment {
         BUILD_DIR = 'build'
         INDEX_HTML = 'index.html'
-        NETLIFY_SITE_ID = 'eb5a1fab-7af2-472e-975a-6cee64e37a47'
+        NETLIFY_SITE_ID = '34e69c4e-c9f9-4ebc-9b60-bdce1d2ab778'
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
         REACT_APP_VERSION = "1.0.$BUILD_ID"
     }
@@ -144,7 +144,7 @@ pipeline {
             }
             
             environment {
-                 CI_ENVIRONMENT_URL='https://production-babsom.netlify.app'
+                 CI_ENVIRONMENT_URL='https://prod-somsom.netlify.app'
             }
 
             steps {
