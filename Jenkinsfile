@@ -15,12 +15,6 @@ pipeline {
             this is a block comment
             second line
         */
-        stage('Docker') {
-            steps {
-                sh 'docker build -t my-docker  .'
-            }
-        }
-
         stage('Build') {
             agent {
                 docker {
