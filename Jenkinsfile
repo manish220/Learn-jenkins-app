@@ -24,7 +24,7 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image 'node:22-alpine'
                     reuseNode true
                 }
             }
@@ -45,7 +45,7 @@ pipeline {
                 stage ('Unit Testing') {
                     agent {
                         docker {
-                            image 'node:18-alpine'
+                            image 'node:22-alpine'
                             reuseNode true
                         }
                     }
@@ -111,7 +111,7 @@ pipeline {
                     netlify --version
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     netlify status
-                    netlify deploy --dir=build --json > staging-output.json
+                    netlify deploy --dir=build --nobuild --json > staging-output.json
                     CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' staging-output.json)
                     npx playwright test --reporter=html
                 '''
@@ -155,7 +155,7 @@ pipeline {
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     
-                    netlify deploy --dir=build --prod 
+                    netlify deploy --dir=build --nobuild --prod 
                     npx playwright test --reporter=html
                 '''
             }
