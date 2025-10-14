@@ -15,6 +15,20 @@ pipeline {
             this is a block comment
             second line
         */
+        stage ('AWS-CLI') {
+            agent {
+                docker {
+                    image amazon/aws-cli
+                }
+            }
+
+            steps {
+                sh ''''
+                    aws --version
+                '''
+            }
+        }
+
         stage('Build') {
             agent {
                 docker {
