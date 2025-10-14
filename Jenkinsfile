@@ -18,14 +18,20 @@ pipeline {
         stage('Build') {
             agent {
                 docker {
-                    image 'node:22-alpine'
+                    image 'my-docker'
                     reuseNode true
                 }
             }
+/*            agent {
+                docker {
+                    image 'node:22-alpine'
+                    reuseNode true
+                }
+            }*/
             steps {
                 sh '''
                     ls -la
-                    node --version
+#                    node --version
                     npm --version
                     npm ci
                     npm run build
@@ -39,11 +45,17 @@ pipeline {
                 stage ('Unit Testing') {
                     agent {
                         docker {
+                            image 'my-docker'
+                            reuseNode true
+                        }
+                    }
+/*                    agent {
+                        docker {
                             image 'node:22-alpine'
                             reuseNode true
                         }
                     }
-
+*/
                     steps {
                         echo 'Testing the app ...'
                         sh '''
@@ -106,7 +118,7 @@ pipeline {
                     echo "Deploying to staging. Site ID: $NETLIFY_SITE_ID"
                     netlify status
                     netlify deploy --dir=build --no-build --json > staging-output.json
-#                   CI_ENVIRONMENT_URL=$(jq -r '.deploy_url' staging-output.json)  artık node-jq değil
+#                   CI_ENVIRONMENT_URL=$(node-jq -r '.deploy_url' staging-output.json)  artık node-jq değil
                     CI_ENVIRONMENT_URL=$(jq -r '.deploy_url' staging-output.json)
                     npx playwright test --reporter=html
                 '''
@@ -145,7 +157,7 @@ pipeline {
             steps {
                 echo 'Testing the app in production ...'
                 sh '''
-                    node --version
+#                    node --version
                     netlify --version
                     echo "Deploying to production. Site ID: $NETLIFY_SITE_ID"
                     netlify status
