@@ -90,7 +90,7 @@ pipeline {
                     echo "Netlify CLI version:"
                     node_modules/.bin/netlify --version
 
-                    echo '$NETLIFY_PROJECT_ID
+                    echo '$NETLIFY_PROJECT_ID'
                 '''
             }
         }
