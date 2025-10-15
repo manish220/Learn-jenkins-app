@@ -94,6 +94,7 @@ pipeline {
                     echo '$NETLIFY_PROJECT_ID'
 
                     node_modules/.bin/netlify status
+                    node_modules/.bin/netlify deploy --dir=build --prod
                 '''
             }
         }
