@@ -1,72 +1,104 @@
 pipeline {
     agent any
 
+    options {
+        // Clean workspace before every build
+        cleanWs()
+    }
+
+    environment {
+        NODE_IMAGE = 'node:18-bullseye' // Debian-based, includes build tools
+    }
+
     stages {
-        stage('Build') {
+
+        stage('Prepare') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image "${NODE_IMAGE}"
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                    ls -la
                     echo "Cleaning old dependencies..."
                     rm -rf node_modules package-lock.json
-
                     echo "Listing files before install:"
-                    ls -la
-                    npm cache clean --force
-                    apk add --no-cache python3 make g++ bash git
-                    echo "Installing dependencies..."
-                    npm install
-
-                    node --version
-                    npm --version
-                    npm run build
                     ls -la
                 '''
             }
         }
-        
-        stage('Test') {
+
+        stage('Install Dependencies') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image "${NODE_IMAGE}"
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                    # For Jest
-                    npm test 
-                   
+                    echo "Installing dependencies..."
+                    npm ci  # deterministic install using package-lock.json
                 '''
             }
-        } 
+        }
+
+        stage('Build') {
+            agent {
+                docker {
+                    image "${NODE_IMAGE}"
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    echo "Node & NPM versions:"
+                    node --version
+                    npm --version
+
+                    echo "Building project..."
+                    npm run build
+                '''
+            }
+        }
+
+        stage('Test') {
+            agent {
+                docker {
+                    image "${NODE_IMAGE}"
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    echo "Running tests..."
+                    npm test
+                '''
+            }
+        }
 
         stage('Deploy') {
             agent {
                 docker {
-                    image 'node:18-alpine'
+                    image "${NODE_IMAGE}"
                     reuseNode true
                 }
             }
             steps {
                 sh '''
-                   npm install netlify-cli
-                   node_modules/.bin/netlify --version
+                    echo "Installing Netlify CLI locally..."
+                    npm install netlify-cli
+                    node_modules/.bin/netlify --version
                 '''
             }
         }
 
+    }
 
-        
-    } 
-    
-    post{
-        always{
+    post {
+        always {
+            echo 'Publishing test results...'
             junit 'jest-results/junit.xml'
         }
     }
