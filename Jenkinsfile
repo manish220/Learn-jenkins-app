@@ -71,7 +71,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    echo "Running tests..."
+                    echo "Running tests."
                     npm test
                 '''
             }
