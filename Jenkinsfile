@@ -12,6 +12,15 @@ pipeline {
             steps {
                 sh '''
                     ls -la
+                    echo "Cleaning old dependencies..."
+                    rm -rf node_modules package-lock.json
+
+                    echo "Listing files before install:"
+                    ls -la
+
+                    echo "Installing dependencies..."
+                    npm install
+
                     node --version
                     npm --version
                     npm run build
