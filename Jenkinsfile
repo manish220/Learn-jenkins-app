@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         NODE_IMAGE = 'node:18-bullseye' // Debian-based Node image with build tools
-        NETLIFY_PROJECT_ID = '242cdea1-d3ec-4dff-9c3e-5fe8c2a39c5c'
+        NETLIFY_SITE_ID = '242cdea1-d3ec-4dff-9c3e-5fe8c2a39c5c'
         NETLIFY_AUTH_TOKEN = credentials('netlify-token')
     }
 
@@ -94,7 +94,7 @@ pipeline {
                     echo '$NETLIFY_PROJECT_ID'
 
                     node_modules/.bin/netlify status
-                    node_modules/.bin/netlify deploy --dir=build --prod
+                    node_modules/.bin/netlify deploy --prod --dir=build --site=$NETLIFY_SITE_ID
                 '''
             }
         }
