@@ -1,14 +1,13 @@
 pipeline {
     agent any
 
-    
     environment {
-        NODE_IMAGE = 'node:18-bullseye' // Debian-based, includes build tools
+        NODE_IMAGE = 'node:18-bullseye' // Debian-based Node image with build tools
     }
 
     stages {
 
-        stage('Prepare') {
+        stage('Prepare Workspace') {
             agent {
                 docker {
                     image "${NODE_IMAGE}"
@@ -17,9 +16,10 @@ pipeline {
             }
             steps {
                 sh '''
-                    echo "Cleaning old dependencies..."
-                    rm -rf node_modules package-lock.json
-                    echo "Listing files before install:"
+                    echo "Cleaning workspace before build..."
+                    rm -rf node_modules
+
+                    echo "Listing files:"
                     ls -la
                 '''
             }
@@ -34,8 +34,7 @@ pipeline {
             }
             steps {
                 sh '''
-                    echo "Installing dependencies..."
-                    npm ci  # deterministic install using package-lock.json
+                    npm install
                 '''
             }
         }
@@ -49,12 +48,14 @@ pipeline {
             }
             steps {
                 sh '''
-                    echo "Node & NPM versions:"
-                    node --version
-                    npm --version
+                    echo "Node version: $(node --version)"
+                    echo "NPM version: $(npm --version)"
 
                     echo "Building project..."
                     npm run build
+
+                    echo "Listing files after build:"
+                    ls -la
                 '''
             }
         }
@@ -85,6 +86,7 @@ pipeline {
                 sh '''
                     echo "Installing Netlify CLI locally..."
                     npm install netlify-cli
+                    echo "Netlify CLI version:"
                     node_modules/.bin/netlify --version
                 '''
             }
@@ -94,9 +96,11 @@ pipeline {
 
     post {
         always {
-            echo 'Publishing test results...'
+            echo "Publishing test results..."
             junit 'jest-results/junit.xml'
-            cleanWs()
+
+            echo "Cleaning workspace after build..."
+            cleanWs()  // Deletes entire workspace to prevent leftovers
         }
     }
 }
