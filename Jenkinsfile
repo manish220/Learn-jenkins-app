@@ -1,11 +1,7 @@
 pipeline {
     agent any
 
-    options {
-        // Clean workspace before every build
-        cleanWs()
-    }
-
+    
     environment {
         NODE_IMAGE = 'node:18-bullseye' // Debian-based, includes build tools
     }
@@ -100,6 +96,7 @@ pipeline {
         always {
             echo 'Publishing test results...'
             junit 'jest-results/junit.xml'
+            cleanWs()
         }
     }
 }
