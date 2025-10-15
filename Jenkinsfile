@@ -17,7 +17,8 @@ pipeline {
 
                     echo "Listing files before install:"
                     ls -la
-
+                    npm cache clean --force
+                    apk add --no-cache python3 make g++ bash git
                     echo "Installing dependencies..."
                     npm install
 
