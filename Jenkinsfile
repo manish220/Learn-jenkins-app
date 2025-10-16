@@ -23,13 +23,13 @@ pipeline {
                     reuseNode true
                 }
             }
-            agent {
- /*               docker {
+ /*           agent {
+               docker {
                     image 'node:22-alpine'
                     reuseNode true
                 }
-*/            }
-            steps {
+            }
+*/            steps {
                 sh '''
                     ls -la
                     npm --version
