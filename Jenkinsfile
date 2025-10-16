@@ -99,7 +99,7 @@ pipeline {
             }
         }
 
-        stage{
+        stage('Approval'){
              steps {
                 echo 'Ready to Aprove...'
                 timeout(1) {
