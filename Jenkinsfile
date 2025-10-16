@@ -5,7 +5,7 @@ pipeline {
         BUILD_DIR = 'build'
         INDEX_HTML = 'index.html'
         REACT_APP_VERSION = "1.0.$BUILD_ID"
-        AWS_DEFAULT_REGION = "us-east_1"
+        AWS_DEFAULT_REGION = "us-east-1"
     }
  
     stages {
