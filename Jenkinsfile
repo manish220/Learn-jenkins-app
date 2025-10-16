@@ -23,12 +23,12 @@ pipeline {
                     reuseNode true
                 }
             }
-/*            agent {
-                docker {
+            agent {
+ /*               docker {
                     image 'node:22-alpine'
                     reuseNode true
                 }
-            }*/
+*/            }
             steps {
                 sh '''
                     ls -la
@@ -50,7 +50,7 @@ pipeline {
             }
 
             environment {
-                AWS_BUCKET_NAME = 'learn-jenkins-202510141554'
+                AWS_BUCKET = 'learn-jenkins-202510141554'
             }
             
             steps {
@@ -61,8 +61,9 @@ pipeline {
 #                        echo "Hello S3!" > index.html
 #                       aws s3 cp index.html s3://$AWS_BUCKET_NAME/index.html
 #                      aws s3 sync . s3://$AWS_BUCKET_NAME/index.html    curruent directory
-                       aws s3 sync build s3://$AWS_BUCKET_NAME/index.html     
-                         aws s3 ls
+#                      aws s3 sync build s3://$AWS_BUCKET/index.html     wrong dirname
+                      aws s3 sync build s3://$AWS_BUCKET    
+                          aws s3 ls
                     '''
                 }
             }
