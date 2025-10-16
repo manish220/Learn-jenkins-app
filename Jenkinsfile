@@ -77,7 +77,7 @@ pipeline {
             }
         }
 
-        stage('Deploy') {
+        stage('Deploy Staging') {
             agent {
                 docker {
                     image "${NODE_IMAGE}"
@@ -98,6 +98,37 @@ pipeline {
                 '''
             }
         }
+
+        stage{
+             steps {
+                echo 'Ready to Aprove...'
+                timeout(1) {
+                    input 'Ready to Deploy'
+              }
+                 
+            }
+        }
+        stage('Deploy Production') {
+            agent {
+                docker {
+                    image "${NODE_IMAGE}"
+                    reuseNode true
+                }
+            }
+            steps {
+                sh '''
+                    echo "Installing Netlify CLI locally..."
+                    npm install netlify-cli
+                    echo "Netlify CLI version:"
+                    node_modules/.bin/netlify --version
+
+                    echo '$NETLIFY_PROJECT_ID'
+
+                    node_modules/.bin/netlify status
+                    node_modules/.bin/netlify deploy --prod --dir=build --site=$NETLIFY_SITE_ID
+                '''
+            }
+        }  
 
     }
 
