@@ -88,6 +88,7 @@ pipeline {
                 sh '''
                     echo "Installing Netlify CLI locally..."
                     npm install netlify-cli
+                    npm install netlify-cli node-jq
                     echo "Netlify CLI version:"
                     node_modules/.bin/netlify --version
 
@@ -95,7 +96,8 @@ pipeline {
 
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy --json --dir=build --site=$NETLIFY_SITE_ID > deploy-output.json
-                '''
+                    node_modules/.bin/node-jq -r '.deploy_url' deploy-output.json
+                             '''
             }
         }
 
