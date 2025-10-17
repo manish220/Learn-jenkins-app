@@ -31,6 +31,12 @@ pipeline {
                 '''
             }
         }
+
+        stage('Build MyJenkinsApp Docker Image') {
+            steps {
+                sh 'docker build -t myjenkinsapp  .'
+            }
+        }
  
         stage ('Deploy to AWS') {
             agent {
@@ -49,15 +55,9 @@ pipeline {
                             LATEST_TD_REVISION=$(aws ecs register-task-definition --cli-input-json file://aws/task-definition-prod.json | jq '.taskDefinition.revision')
                             echo $LATEST_TD_REVISION
                             aws ecs update-service --cluster $AWS_ECS_CLUSTER --service $AWS_ECS_SERVICE --task-definition $AWS_ECS_TASKDEF:$LATEST_TD_REVISION
-//                            aws ecs wait services-stable --cluster $AWS_ECS_CLUSTER --services $AWS_ECS_SERVICE
+                            aws ecs wait services-stable --cluster $AWS_ECS_CLUSTER --services $AWS_ECS_SERVICE
                         '''
                 }
-            }
-        }
-
-        stage('Build MyJenkinsApp Docker Image') {
-            steps {
-                sh 'docker build -t my-jenkins-app  .'
             }
         }
      }
