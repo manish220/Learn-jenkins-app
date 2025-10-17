@@ -55,13 +55,10 @@ pipeline {
             }
         }
 
-        stages {
-            stage('Build MyJenkinsApp Docker Image') {
-                steps {
-                    sh 'docker build -t my-jenkins-app  .'
-                }
+        stage('Build MyJenkinsApp Docker Image') {
+            steps {
+                sh 'docker build -t my-jenkins-app  .'
             }
         }
-
-    }
+     }
 }
