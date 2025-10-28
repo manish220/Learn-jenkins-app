@@ -1,0 +1,22 @@
+pipeline {
+    agent any
+
+    stages {
+        stage('Build') {
+            agent {
+                docker {
+                    image 'mcr.microsoft.com/playwright:v1.56.1-noble'
+                    reuseNoode true
+                }
+            }
+            steps {
+                sh '''
+					npm install -g serve
+					serve -s build
+					npx playwright test			
+
+                '''
+            }
+        }
+    }
+}
