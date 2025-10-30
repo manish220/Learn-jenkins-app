@@ -33,5 +33,6 @@ pipeline {
                 ls -la
                 '''
             }
+        }
     }
 }       
