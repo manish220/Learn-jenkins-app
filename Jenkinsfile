@@ -28,9 +28,7 @@ pipeline {
             }
             steps {
                 sh '''
-                npm ci
                 npm run test
-                ls -la
                 '''
             }
         }
