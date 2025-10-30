@@ -1,6 +1,7 @@
 pipeline {
     agent any
     stages{
+        /*
         stage('Build') {
             agent {
                 docker {
@@ -19,6 +20,7 @@ pipeline {
                 '''
             }
         }
+        */
         stage('Test') {
             agent {
                 docker {
@@ -44,7 +46,8 @@ pipeline {
             steps {
                 sh '''
                 npm install -g serve
-                serve -s build
+                node_module/.bin/serve -s build &
+                sleep 10
                 npx playwright test
                 '''
             }
