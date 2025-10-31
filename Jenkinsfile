@@ -108,5 +108,6 @@ pipeline {
                     npx playwright test  --reporter=html
                 '''
             } 
+        }
     }
 }
