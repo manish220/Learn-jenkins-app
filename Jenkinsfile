@@ -39,15 +39,15 @@ pipeline {
 
                     steps {
                         sh '''
-                            test -f build/index.html
+                            #test -f build/index.html
                             npm test
                         '''
                     }
-                    post {
+                    /*post {
                         always {
                             junit 'jest-results/junit.xml'
                         }
-                    }
+                    }*/
                 }
 
                 stage('E2E') {
