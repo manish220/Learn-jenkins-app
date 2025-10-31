@@ -94,12 +94,12 @@ pipeline {
                     npx playwright test  --reporter=html
                 '''
             }
-
+/*
             post {
                 always {
                     publishHTML([allowMissing: false, alwaysLinkToLastBuild: false, keepAll: false, reportDir: 'playwright-report', reportFiles: 'index.html', reportName: 'Staging E2E', reportTitles: '', useWrapperFileDirectly: true])
                 }
-            }
+            }*/
         }
 
         stage('Deploy prod') {
