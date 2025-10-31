@@ -89,6 +89,9 @@ pipeline {
                     echo "Deploying to site with. Site ID : $NETLIFY_SITE_ID"
                     node_modules/.bin/netlify status
                     node_modules/.bin/netlify deploy  --dir=build
+                    timeout(1) {
+                    input message: 'Stage has passed are you sure you want to deploy?', ok: 'Yes, Deploy it to production'
+                    }
                 '''
             }
         }
