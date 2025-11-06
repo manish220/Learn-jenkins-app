@@ -6,6 +6,7 @@ pipeline {
         NETLIFY_AUTH_TOKEN = credentials ('Netlify-token')
         REACT_APP_VERSION = "1.0.$BUILD_ID"
     }
+    
     stages {
         stage('Docker') {
             steps{
